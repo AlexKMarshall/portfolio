@@ -4,7 +4,7 @@ const { tags = [] } = Astro.props;
 ---
 
 {tags.length > 0 ? (
-	<ul class="flex flex-wrap gap-1.5 list-none p-0 m-0" aria-label="Tags">
+	<ul class="tags-list flex flex-wrap gap-1.5 list-none p-0 m-0" aria-label="Tags">
 		{tags.map((tag: string) => (
 			<li>
 				<span

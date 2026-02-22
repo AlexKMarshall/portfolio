@@ -1,0 +1,25 @@
+---
+title: Breadcrumb
+description: Navigation breadcrumb for section and current page context.
+---
+
+Renders a short navigation trail (e.g. "Section / Subsection / Current page"). Use it at the top of content pages so users can see where they are and jump back to parent sections. Accepts an `items` prop: an array of `{ label: string; href?: string }`. Items with `href` are links; the last item is usually the current page and has no `href`. Renders nothing when `items` is empty. Uses `<nav aria-label="Breadcrumb">` and a list structure for accessibility.
+
+## Example
+
+<Breadcrumb
+	items={[
+		{ href: '/pattern-library', label: 'Pattern library' },
+		{ label: 'Breadcrumb' },
+	]}
+/>
+
+## Example with more levels
+
+<Breadcrumb
+	items={[
+		{ href: '/', label: 'Home' },
+		{ href: '/articles', label: 'Articles' },
+		{ label: 'My post title' },
+	]}
+/>

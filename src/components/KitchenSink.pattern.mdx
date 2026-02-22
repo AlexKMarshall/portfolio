@@ -1,0 +1,58 @@
+---
+title: Kitchen sink
+description: All markdown and component elements available in article posts — headings, lists, code, links, figures, and tags.
+---
+
+This pattern shows every element you can use in a post. Use it as a visual reference for how article body content and related components render.
+
+## Headings and text
+
+Use **bold** and *italic* for emphasis. Clear headings (h2, h3) make posts easier to scan.
+
+### A subsection (h3)
+
+Short paragraphs with one main idea work best. You can also use inline `code` when referring to files or technical terms.
+
+## Bullet lists
+
+- One idea per paragraph
+- Short lists when you have a few related points
+- Headings that describe what the next block is about
+
+## Numbered lists
+
+1. Write the post in markdown (or MDX) under `src/content/article/`, or use a folder with `index.mdx` for colocated assets
+2. Add a `title`, `pubDate`, and optional `summary` in the frontmatter
+3. Save the file; the article listing and post page will pick it up automatically
+
+## Links
+
+Here is [a link to the articles index](/articles). Links use the same underline and hover styles everywhere.
+
+## Blockquote
+
+> In real posts you can use blockquotes for pull quotes or quoted material. Structure and spacing stay consistent with the rest of the body.
+
+## Figures (global assets)
+
+Figures are rendered with the `<Figure id="..." />` component. Global assets live under `src/content/images/<id>/` with an image file and `meta.yaml`. In folder posts, you can also use colocated image folders; resolution is local first, then global.
+
+### Figure with alt only (no caption)
+
+<Figure id="figure-plain" />
+
+### Figure with caption
+
+<Figure id="placeholder" caption="Placeholder with a caption set in the post." />
+
+### Figure with caption and attribution
+
+Asset has both `caption` and `attribution` in meta (e.g. Unsplash credits).
+
+<Figure id="curved-fabric" />
+
+## Tags (article metadata)
+
+On article pages, optional tags appear below the date. Same component used in the pattern library:
+
+<ArticleTags tags={['astro', 'markdown', 'demo']} />
