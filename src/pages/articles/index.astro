@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleTags from '../../components/ArticleTags.astro';
 import { getCollection } from 'astro:content';
 import { ARTICLE_PAGE_SIZE } from '../../lib/constants';
 import { excerptFromBody } from '../../lib/excerpt';
@@ -16,7 +17,7 @@ const nextPage = 2;
 	<header class="mb-14">
 		<h1 class="text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Articles</h1>
 		<p class="mt-2 text-lg text-slate-600 dark:text-slate-400">
-			Posts in reverse chronological order.
+			All articles.
 		</p>
 	</header>
 
@@ -51,6 +52,11 @@ const nextPage = 2;
 								</time>
 							) : null}
 						</div>
+						{post.data.tags?.length ? (
+							<div class="mt-2">
+								<ArticleTags tags={post.data.tags} />
+							</div>
+						) : null}
 						<p class="mt-3 text-slate-700 leading-relaxed dark:text-slate-300">
 							{post.data.summary ?? excerptFromBody(post.body)}
 						</p>

@@ -17,6 +17,22 @@ const article = defineCollection({
 		summary: z.string().optional(),
 		pubDate: z.coerce.date(),
 		updatedDate: z.coerce.date().optional(),
+		tags: z
+			.array(z.string())
+			.optional()
+			.transform((arr) => {
+				if (!arr?.length) return [];
+				const seen = new Set<string>();
+				return arr
+					.map((s) => s.trim())
+					.filter((s) => {
+						if (!s) return false;
+						const key = s.toLowerCase();
+						if (seen.has(key)) return false;
+						seen.add(key);
+						return true;
+					});
+			}),
 	}),
 });
 
