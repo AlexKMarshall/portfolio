@@ -32,7 +32,8 @@ This repo is a simple Astro articles site (future part of a personal developer p
 
 - **TypeScript** where possible; inline prop types, no separate interfaces for component props.
 - **Semantic HTML** (e.g. `<article>`, `<figure>`, `<nav>`, `<time>`).
-- **Styling:** Tailwind v4 only; grayscale palette, readable spacing and type. No `@tailwindcss/typography`; post body uses utility classes.
+- **Styling:** Tailwind v4 only; grayscale palette (slate), readable spacing and type. No `@tailwindcss/typography`; post body uses utility classes.
+- **Dark mode:** Follows OS/browser preference (`prefers-color-scheme: dark`); no theme toggle. When adding or changing components, layouts, or markup that use color utilities (e.g. `bg-*`, `text-*`, `border-*`), always add matching `dark:` variants so the UI looks correct in both modes. Use the existing slate scale (e.g. `dark:bg-slate-900`, `dark:text-slate-100`, `dark:border-slate-700`); keep contrast accessible.
 - **Article collection:** Glob excludes `**/README.md` so docs in content dirs don’t get validated as entries.
 - **Figure resolution:** In a post, `<Figure id="x" />` resolves to local `postId/x` first, then global `x`. `postId` comes from `Astro.locals.postId` set in `[slug].astro`.
 
@@ -50,6 +51,7 @@ There is no `turbo.json` in this repo; use the scripts above. Prefer running the
 - **New folder post:** Add `slug/index.mdx` (and optionally colocated image folders). Same frontmatter; slug = folder name.
 - **New global image:** Add folder under `src/content/images/<id>/` with one image file and `meta.yaml`. See `src/content/images/README.md`.
 - **New local image:** Add folder next to the post’s `index.mdx` with same structure; reference with `<Figure id="folder-name" />` in that post.
+- **New components or markup:** Any new Astro components, layout changes, or page markup that use Tailwind color classes must include corresponding `dark:` variants (see **Dark mode** under Conventions).
 
 ## Promoting a local image to global
 

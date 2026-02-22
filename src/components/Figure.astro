@@ -26,12 +26,12 @@ const attribution = asset?.attribution;
 		<img
 			src={asset.url}
 			alt={asset.alt}
-			class="max-w-full rounded border border-slate-200"
+			class="max-w-full rounded border border-slate-200 dark:border-slate-700"
 			loading="lazy"
 			decoding="async"
 		/>
 		{(caption ?? attribution) ? (
-			<figcaption class="mt-2 text-sm text-slate-500 [&_a]:underline [&_a]:decoration-slate-400 [&_a]:underline-offset-2 hover:[&_a]:decoration-slate-600">
+			<figcaption class="mt-2 text-sm text-slate-500 [&_a]:underline [&_a]:decoration-slate-400 [&_a]:underline-offset-2 hover:[&_a]:decoration-slate-600 dark:text-slate-400 dark:[&_a]:decoration-slate-500 dark:hover:[&_a]:decoration-slate-400">
 				{caption ? <span>{caption}</span> : null}
 				{attribution ? (
 					<span class={caption ? ' block mt-1' : ''} set:html={attribution} />
