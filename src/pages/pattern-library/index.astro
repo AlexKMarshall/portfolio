@@ -1,5 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PatternList from '../../components/PatternList.astro';
+import { getCollection } from 'astro:content';
+
+const patterns = (await getCollection('pattern')).sort((a, b) =>
+	a.data.title.localeCompare(b.data.title),
+);
 ---
 
 <BaseLayout
@@ -20,25 +26,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 		<h2 id="patterns-heading" class="mb-4 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
 			Patterns
 		</h2>
-		<ul class="space-y-2 list-none p-0 m-0">
-			<li>
-				<a
-					href="/pattern-library/article-tags"
-					class="text-slate-700 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-500 dark:text-slate-300 dark:decoration-slate-500 dark:hover:decoration-slate-400"
-				>
-					ArticleTags
-				</a>
-				<span class="text-slate-500 dark:text-slate-400"> — inline tag pills for article metadata</span>
-			</li>
-			<li>
-				<a
-					href="/pattern-library/figure"
-					class="text-slate-700 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-500 dark:text-slate-300 dark:decoration-slate-500 dark:hover:decoration-slate-400"
-				>
-					Figure
-				</a>
-				<span class="text-slate-500 dark:text-slate-400"> — responsive images with optional caption and attribution</span>
-			</li>
-		</ul>
+		<PatternList patterns={patterns} />
 	</section>
 </BaseLayout>

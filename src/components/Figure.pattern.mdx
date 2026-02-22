@@ -1,0 +1,24 @@
+---
+title: Figure
+description: Responsive images with optional caption and attribution from global or post-local assets.
+---
+
+Renders an image from the global or post-local asset system. Props: `id` (required), `caption` (optional override), `postId` (optional, for article-local assets). Caption and attribution come from the asset’s `meta.yaml` unless overridden.
+
+## Without caption or attribution
+
+Asset has only `alt` in meta; no `<figcaption>` is rendered.
+
+<Figure id="figure-plain" />
+
+## With caption only
+
+Asset has `caption` in meta; attribution can be overridden or omitted.
+
+<Figure id="placeholder" />
+
+## With caption and attribution
+
+Asset has both `caption` and `attribution` (HTML allowed for credits, e.g. Unsplash).
+
+<Figure id="curved-fabric" />

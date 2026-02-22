@@ -1,0 +1,15 @@
+---
+/** @param {{ id: string; title: string; description: string }} */
+const { id, title, description } = Astro.props;
+const href = `/pattern-library/${id}`;
+---
+
+<li>
+	<a
+		href={href}
+		class="text-slate-700 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-500 dark:text-slate-300 dark:decoration-slate-500 dark:hover:decoration-slate-400"
+	>
+		{title}
+	</a>
+	<span class="text-slate-500 dark:text-slate-400"> — {description}</span>
+</li>
