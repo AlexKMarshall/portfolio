@@ -29,6 +29,7 @@ const site = defineCollection({
 	}),
 	schema: z.object({
 		hero: z.string(),
+		github: z.string().url().optional(),
 	}),
 });
 
