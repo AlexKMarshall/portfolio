@@ -1,0 +1,56 @@
+# Agent guide — blog
+
+This repo is a simple Astro blog (future part of a personal developer portfolio). Use this file to work effectively in the codebase without duplicating the human-facing docs.
+
+## What’s here
+
+- **Blog:** Listing at `/blogs` (paginated), posts at `/blogs/:slug`. Content is Markdown/MDX in the repo; no CMS.
+- **Images:** Global assets in `src/content/images/`; folder posts can have colocated image folders. Same structure everywhere (image file + `meta.yaml`) so local assets can be moved to global later.
+- **Stack:** Astro 5, TypeScript, Tailwind v4 (Vite plugin), MDX, YAML for image metadata. No extra deps except Tailwind and `yaml`.
+
+## Where to look (don’t duplicate these)
+
+- **Blog posts and folder posts:** `src/content/blog/README.md`
+- **Global image assets and meta format:** `src/content/images/README.md`
+- **Generated images / deploy:** `public/images/README.md`
+
+## Key paths
+
+| Purpose | Path |
+|--------|------|
+| Blog content (file or folder post) | `src/content/blog/` |
+| Global image assets (folder per image + `meta.yaml`) | `src/content/images/` |
+| Blog collection config (glob, schema) | `src/content.config.ts` |
+| Image copy + virtual module | `vite-plugin-image-assets.mjs` (root) |
+| Figure (resolve id, optional postId) | `src/components/Figure.astro` |
+| Post layout, passes `Astro.locals.postId` | `src/pages/blogs/[slug].astro` |
+| Listing + pagination | `src/pages/blogs/index.astro`, `src/pages/blogs/page/[page].astro` |
+| Shared constants (e.g. page size) | `src/lib/constants.ts` |
+| Excerpt from raw body | `src/lib/excerpt.ts` |
+
+## Conventions and constraints
+
+- **TypeScript** where possible; inline prop types, no separate interfaces for component props.
+- **Semantic HTML** (e.g. `<article>`, `<figure>`, `<nav>`, `<time>`).
+- **Styling:** Tailwind v4 only; grayscale palette, readable spacing and type. No `@tailwindcss/typography`; post body uses utility classes.
+- **Blog collection:** Glob excludes `**/README.md` so docs in content dirs don’t get validated as entries.
+- **Figure resolution:** In a post, `<Figure id="x" />` resolves to local `postId/x` first, then global `x`. `postId` comes from `Astro.locals.postId` set in `[slug].astro`.
+
+## Commands
+
+- **Dev:** `pnpm dev`
+- **Build:** `pnpm build`
+- **Preview:** `pnpm preview`
+
+There is no `turbo.json` in this repo; use the scripts above. Prefer running these to verify changes.
+
+## Adding or changing content
+
+- **New file post:** Add `slug.md` or `slug.mdx` under `src/content/blog/` with frontmatter `title`, `pubDate`, optional `summary`. See `src/content/blog/README.md`.
+- **New folder post:** Add `slug/index.mdx` (and optionally colocated image folders). Same frontmatter; slug = folder name.
+- **New global image:** Add folder under `src/content/images/<id>/` with one image file and `meta.yaml`. See `src/content/images/README.md`.
+- **New local image:** Add folder next to the post’s `index.mdx` with same structure; reference with `<Figure id="folder-name" />` in that post.
+
+## Promoting a local image to global
+
+Move the asset folder from `src/content/blog/<post-slug>/<asset-id>/` to `src/content/images/<asset-id>/`. The same `<Figure id="asset-id" />` then resolves globally; no change needed in the post if the id is unchanged.
