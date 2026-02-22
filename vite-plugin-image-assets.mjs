@@ -33,7 +33,7 @@ function loadMeta(dir) {
 
 /**
  * Generate WebP variants at WIDTHS (capped at source width). Writes to outDir.
- * @returns {{ srcSet: Array<{ url: string; w: number }>; fallbackUrl: string }}
+ * @returns {Promise<{ sources: Array<{ type: string; srcSet: Array<{ url: string; w: number }>; sizes: string }>; fallbackUrl: string }>}
  */
 async function generateRasterVariants(srcPath, outDir, urlPrefix, id) {
 	const image = sharp(srcPath);
@@ -77,7 +77,7 @@ async function generateRasterVariants(srcPath, outDir, urlPrefix, id) {
 	};
 }
 
-async function addAsset(map, key, dir, id, publicBase, urlPrefix, root) {
+async function addAsset(map, key, dir, id, publicBase, urlPrefix) {
 	const files = fs.readdirSync(dir);
 	const meta = loadMeta(dir);
 	if (!meta) {
@@ -137,7 +137,7 @@ async function discoverAndCopy(root) {
 			.map((d) => d.name);
 		for (const id of ids) {
 			const dir = path.join(globalBase, id);
-			await addAsset(map, id, dir, id, publicBase, '', root);
+			await addAsset(map, id, dir, id, publicBase, '');
 		}
 	}
 
@@ -159,7 +159,7 @@ async function discoverAndCopy(root) {
 			for (const assetId of subdirs) {
 				const assetDir = path.join(postDir, assetId);
 				const key = slug + '/' + assetId;
-				await addAsset(map, key, assetDir, assetId, publicBase, slug, root);
+				await addAsset(map, key, assetDir, assetId, publicBase, slug);
 			}
 		}
 	}
