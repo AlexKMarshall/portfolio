@@ -19,6 +19,20 @@ const article = defineCollection({
 	}),
 });
 
+const site = defineCollection({
+	loader: glob({
+		pattern: ['**/*.md', '**/*.mdx', '!**/README.md'],
+		base: './src/content/site',
+		generateId({ entry }) {
+			return entry.replace(/\.(mdx?|md)$/i, '');
+		},
+	}),
+	schema: z.object({
+		hero: z.string(),
+	}),
+});
+
 export const collections = {
 	article,
+	site,
 };

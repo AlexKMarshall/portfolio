@@ -1,20 +1,68 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry, getCollection, render } from 'astro:content';
+import { excerptFromBody } from '../lib/excerpt';
+
+const home = await getEntry('site', 'home');
+if (!home) throw new Error('Missing src/content/site/home.md');
+const { Content } = await render(home);
+
+const allPosts = (await getCollection('article')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const recentPosts = allPosts.slice(0, 3);
 ---
 
-<BaseLayout title="Home" description="A simple articles site.">
-	<header class="mb-14">
-		<h1 class="text-3xl font-semibold tracking-tight text-neutral-900">Articles</h1>
-		<p class="mt-2 text-lg text-neutral-600">
-			A simple text-based articles site. No CMS.
-		</p>
+<BaseLayout title="Home" description={home.data.hero + ' — A simple articles site.'}>
+	<header class="mb-10">
+		<h1 class="text-3xl font-semibold tracking-tight text-neutral-900">
+			{home.data.hero}
+		</h1>
+		<div class="mt-5 space-y-5 text-neutral-700 leading-relaxed [&_a]:underline [&_a]:decoration-neutral-300 [&_a]:underline-offset-4 hover:[&_a]:decoration-neutral-500 [&_p]:leading-relaxed">
+			<Content />
+		</div>
 	</header>
-	<p class="text-neutral-700 leading-relaxed">
-		<a
-			href="/articles"
-			class="font-medium underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-500"
-		>
-			View all posts →
-		</a>
-	</p>
+
+	<section aria-labelledby="articles-heading">
+		<h2 id="articles-heading" class="mb-8 text-xl font-semibold tracking-tight text-neutral-900">
+			Articles
+		</h2>
+		<ul class="space-y-8 list-none p-0 m-0">
+			{recentPosts.map((post) => (
+				<li>
+					<article>
+						<h3 class="text-lg font-semibold tracking-tight">
+							<a
+								href={`/articles/${post.id}`}
+								class="text-neutral-900 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-500 focus:outline focus:decoration-neutral-700"
+							>
+								{post.data.title}
+							</a>
+						</h3>
+						<time
+							datetime={post.data.pubDate.toISOString()}
+							class="mt-1 block text-sm text-neutral-500"
+						>
+							{post.data.pubDate.toLocaleDateString('en-US', {
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric',
+							})}
+						</time>
+						<p class="mt-2 text-neutral-700 leading-relaxed">
+							{post.data.summary ?? excerptFromBody(post.body)}
+						</p>
+					</article>
+				</li>
+			))}
+		</ul>
+		<p class="mt-8">
+			<a
+				href="/articles"
+				class="font-medium text-neutral-700 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-500"
+			>
+				View all articles →
+			</a>
+		</p>
+	</section>
 </BaseLayout>
