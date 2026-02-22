@@ -1,1 +1,12 @@
 @import 'tailwindcss';
+
+/* Code blocks in article and pattern-library content: subtle background, single text color */
+.post-body pre,
+.pattern-body pre {
+  @apply rounded-lg border border-slate-200 bg-slate-100 p-4 overflow-x-auto text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200;
+}
+
+.post-body pre code,
+.pattern-body pre code {
+  @apply bg-transparent p-0 rounded-none font-normal;
+}

@@ -33,6 +33,18 @@ Here is [a link to the articles index](/articles). Links use the same underline 
 
 > In real posts you can use blockquotes for pull quotes or quoted material. Structure and spacing stay consistent with the rest of the body.
 
+## Code block
+
+Multi-line code blocks use fenced syntax with a language label. Here is a simple React component:
+
+```tsx
+function Greeting({ name }: { name: string }) {
+  return <span>Hello, {name}!</span>;
+}
+
+export default Greeting;
+```
+
 ## Figures (global assets)
 
 Figures are rendered with the `<Figure id="..." />` component. Global assets live under `src/content/images/<id>/` with an image file and `meta.yaml`. In folder posts, you can also use colocated image folders; resolution is local first, then global.
