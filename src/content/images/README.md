@@ -1,16 +1,17 @@
 # Image assets (content folder)
 
-One folder per image. Each folder must contain:
+One folder per image. Each folder contains:
 
 1. **One image file** – any name, extension `.jpg`, `.jpeg`, `.png`, `.webp`, `.svg`, or `.gif`.
-2. **`meta.json`** – metadata for the image:
+2. **`meta.yaml`** – minimal metadata:
 
-```json
-{
-  "alt": "Required description for accessibility",
-  "caption": "Optional default caption (can be overridden in the post)",
-  "attribution": "Optional HTML, e.g. Unsplash credit: Photo by <a href=\"...\">Name</a> on <a href=\"...\">Unsplash</a>"
-}
+```yaml
+alt: Required description for accessibility
+caption: Optional default caption (override in post with caption prop)
+attribution: |
+  Paste Unsplash HTML here — no escaping. Use the | so you can paste as-is.
 ```
 
-At build time, images are copied to `public/images/<folder-name>.<ext>` and served from there. In posts, reference by the folder name (id): `<Figure id="folder-name" />` or `<Figure id="folder-name" caption="Override caption" />`.
+For `attribution`, use the `|` block style and paste the full Unsplash “Copy” text on the next line(s). No quotes or escaping needed.
+
+At build time, images are copied to `public/images/<folder-name>.<ext>`. In posts: `<Figure id="folder-name" />` or `<Figure id="folder-name" caption="Override" />`.
