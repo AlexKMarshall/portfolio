@@ -12,6 +12,6 @@ attribution: |
   Paste Unsplash HTML here — no escaping. Use the | so you can paste as-is.
 ```
 
-At build time, images are copied to `public/images/<folder-name>.<ext>`. In any post: `<Figure id="folder-name" />`.
+At build time, **raster** images (jpg, png, webp, gif) are optimized with Sharp: multiple widths (400, 800, 1200) are generated as WebP and written to `public/images/<id>/`. **SVG** is copied as-is. The Figure component renders a `<picture>` with responsive `srcset` for raster assets so small screens receive smaller files; SVG uses a single `<img>`.
 
 **To promote a local (post-colocated) image to global:** move the asset folder from `src/content/article/<post-slug>/<asset-id>/` to `src/content/images/<asset-id>/`. Update the post to use `<Figure id="asset-id" />` (same id, now resolved globally).

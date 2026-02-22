@@ -1,20 +1,25 @@
 /**
- * Vite plugin: image content folders → public + virtual module
+ * Vite plugin: image content folders → public (optimized) + virtual module
  *
- * Scans src/content/images/<id>/ for:
+ * Scans src/content/images/<id>/ and src/content/article/<slug>/<asset-id>/ for:
  *   - exactly one image file (.jpg, .jpeg, .png, .webp, .svg, .gif)
  *   - meta.yaml with alt, optional caption and attribution
- * YAML allows raw paste of Unsplash HTML (use | for multi-line).
- * Copies the image to public/images/<id>.<ext> and exposes "virtual:image-assets".
+ *
+ * Raster images: Sharp generates multiple widths (400, 800, 1200) as WebP; no upscaling.
+ * SVG/GIF: copied as-is. Exposes "virtual:image-assets" with url or sources + fallbackUrl.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import YAML from 'yaml';
+import sharp from 'sharp';
 
 const GLOBAL_IMAGES_DIR = 'src/content/images';
-const BLOG_DIR = 'src/content/blog';
+const ARTICLE_DIR = 'src/content/article';
 const PUBLIC_DIR = 'public/images';
 const IMAGE_EXT = /\.(jpg|jpeg|png|webp|svg|gif)$/i;
+const RASTER_EXT = /\.(jpg|jpeg|png|webp|gif)$/i;
+const WIDTHS = [400, 800, 1200];
+const DEFAULT_SIZES = '(max-width: 768px) 100vw, 800px';
 const VIRTUAL_ID = 'virtual:image-assets';
 const VIRTUAL_ID_RESOLVED = '\0' + VIRTUAL_ID;
 
@@ -26,7 +31,53 @@ function loadMeta(dir) {
 	return meta && typeof meta === 'object' ? meta : null;
 }
 
-function addAsset(map, key, dir, id, publicBase, urlPrefix) {
+/**
+ * Generate WebP variants at WIDTHS (capped at source width). Writes to outDir.
+ * @returns {Promise<{ sources: Array<{ type: string; srcSet: Array<{ url: string; w: number }>; sizes: string }>; fallbackUrl: string }>}
+ */
+async function generateRasterVariants(srcPath, outDir, urlPrefix, id) {
+	const image = sharp(srcPath);
+	const meta = await image.metadata();
+	const srcWidth = meta.width ?? Infinity;
+	const widths = [...WIDTHS].filter((w) => w <= srcWidth);
+	if (srcWidth < Infinity && srcWidth > 0 && !widths.includes(srcWidth)) {
+		widths.push(srcWidth);
+		widths.sort((a, b) => a - b);
+	}
+	if (widths.length === 0) widths.push(Math.min(WIDTHS[0], srcWidth) || WIDTHS[0]);
+
+	fs.mkdirSync(outDir, { recursive: true });
+	const baseUrl = urlPrefix ? `/images/${urlPrefix}/${id}` : `/images/${id}`;
+	const srcSet = [];
+	let fallbackUrl = '';
+
+	for (const w of widths) {
+		const outName = `${w}.webp`;
+		const outPath = path.join(outDir, outName);
+		await image
+			.clone()
+			.resize({ width: w, fit: 'inside' })
+			.webp({ quality: 80 })
+			.toFile(outPath);
+		const url = `${baseUrl}/${outName}`;
+		srcSet.push({ url, w });
+		if (w === 800 || (w === widths[widths.length - 1] && !fallbackUrl)) fallbackUrl = url;
+	}
+	if (!fallbackUrl) fallbackUrl = srcSet[srcSet.length - 1].url;
+
+	return {
+		sources: [
+			{
+				type: 'image/webp',
+				srcSet,
+				sizes: DEFAULT_SIZES,
+			},
+		],
+		fallbackUrl,
+	};
+}
+
+async function addAsset(map, key, dir, id, publicBase, urlPrefix) {
 	const files = fs.readdirSync(dir);
 	const meta = loadMeta(dir);
 	if (!meta) {
@@ -43,21 +94,37 @@ function addAsset(map, key, dir, id, publicBase, urlPrefix) {
 		return;
 	}
 	const ext = path.extname(imageFile).toLowerCase();
-	const outName = id + ext;
 	const srcPath = path.join(dir, imageFile);
-	const outPath = path.join(publicBase, urlPrefix, outName);
-	fs.mkdirSync(path.dirname(outPath), { recursive: true });
-	fs.copyFileSync(srcPath, outPath);
-	const url = urlPrefix ? `/images/${urlPrefix}/${outName}` : '/images/' + outName;
-	map[key] = {
-		url,
+	const outDir = path.join(publicBase, urlPrefix, id);
+	const baseUrl = urlPrefix ? `/images/${urlPrefix}/${id}` : `/images/${id}`;
+
+	const base = {
 		alt: meta.alt,
 		caption: meta.caption ?? undefined,
 		attribution: meta.attribution ?? undefined,
 	};
+
+	if (RASTER_EXT.test(imageFile)) {
+		const { sources, fallbackUrl } = await generateRasterVariants(
+			srcPath,
+			outDir,
+			urlPrefix,
+			id
+		);
+		map[key] = { sources, fallbackUrl, ...base };
+		return;
+	}
+
+	// SVG: copy as-is
+	const outName = `image${ext}`;
+	const outPath = path.join(outDir, outName);
+	fs.mkdirSync(path.dirname(outPath), { recursive: true });
+	fs.copyFileSync(srcPath, outPath);
+	const url = `${baseUrl}/${outName}`;
+	map[key] = { url, ...base };
 }
 
-function discoverAndCopy(root) {
+async function discoverAndCopy(root) {
 	const map = {};
 	const publicBase = path.join(root, PUBLIC_DIR);
 	fs.mkdirSync(publicBase, { recursive: true });
@@ -70,27 +137,30 @@ function discoverAndCopy(root) {
 			.map((d) => d.name);
 		for (const id of ids) {
 			const dir = path.join(globalBase, id);
-			addAsset(map, id, dir, id, publicBase, '');
+			await addAsset(map, id, dir, id, publicBase, '');
 		}
 	}
 
-	// Local images: src/content/blog/<slug>/ with index.mdx or index.md -> post folder; subdirs with meta.yaml + image are local assets
-	const blogBase = path.join(root, BLOG_DIR);
-	if (!fs.existsSync(blogBase)) return map;
-	const blogDirs = fs.readdirSync(blogBase, { withFileTypes: true })
-		.filter((d) => d.isDirectory())
-		.map((d) => d.name);
-	for (const slug of blogDirs) {
-		const postDir = path.join(blogBase, slug);
-		const hasIndex = ['index.mdx', 'index.md'].some((f) => fs.existsSync(path.join(postDir, f)));
-		if (!hasIndex) continue;
-		const subdirs = fs.readdirSync(postDir, { withFileTypes: true })
+	// Local images: src/content/article/<slug>/ with index.mdx or index.md → post folder; subdirs with meta.yaml + image are local assets
+	const articleBase = path.join(root, ARTICLE_DIR);
+	if (fs.existsSync(articleBase)) {
+		const slugs = fs.readdirSync(articleBase, { withFileTypes: true })
 			.filter((d) => d.isDirectory())
 			.map((d) => d.name);
-		for (const assetId of subdirs) {
-			const assetDir = path.join(postDir, assetId);
-			const key = slug + '/' + assetId;
-			addAsset(map, key, assetDir, assetId, publicBase, slug);
+		for (const slug of slugs) {
+			const postDir = path.join(articleBase, slug);
+			const hasIndex = ['index.mdx', 'index.md'].some((f) =>
+				fs.existsSync(path.join(postDir, f))
+			);
+			if (!hasIndex) continue;
+			const subdirs = fs.readdirSync(postDir, { withFileTypes: true })
+				.filter((d) => d.isDirectory())
+				.map((d) => d.name);
+			for (const assetId of subdirs) {
+				const assetDir = path.join(postDir, assetId);
+				const key = slug + '/' + assetId;
+				await addAsset(map, key, assetDir, assetId, publicBase, slug);
+			}
 		}
 	}
 	return map;
@@ -99,18 +169,17 @@ function discoverAndCopy(root) {
 /** @returns {import('vite').Plugin} */
 export default function imageAssetsPlugin() {
 	let root = process.cwd();
-	/** @type {Record<string, { url: string; alt: string; caption?: string; attribution?: string }>} */
+	/** @type {Record<string, { url?: string; sources?: Array<{ type: string; srcSet: Array<{ url: string; w: number }>; sizes: string }>; fallbackUrl?: string; alt: string; caption?: string; attribution?: string }>} */
 	let assetsMap = {};
 
 	return {
 		name: 'vite-plugin-image-assets',
-		/** @type {'pre'} */
 		enforce: 'pre',
 		configResolved(config) {
 			root = config.root;
 		},
-		buildStart() {
-			assetsMap = discoverAndCopy(root);
+		async buildStart() {
+			assetsMap = await discoverAndCopy(root);
 		},
 		resolveId(id) {
 			if (id === VIRTUAL_ID) return VIRTUAL_ID_RESOLVED;
@@ -120,8 +189,8 @@ export default function imageAssetsPlugin() {
 			if (id !== VIRTUAL_ID_RESOLVED) return null;
 			return `export const imageAssets = ${JSON.stringify(assetsMap)};\nexport default imageAssets;`;
 		},
-		configureServer() {
-			assetsMap = discoverAndCopy(root);
+		async configureServer() {
+			assetsMap = await discoverAndCopy(root);
 		},
 	};
 }
