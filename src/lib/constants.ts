@@ -1,1 +1,1 @@
-export const BLOG_PAGE_SIZE = 5;
+export const ARTICLE_PAGE_SIZE = 5;

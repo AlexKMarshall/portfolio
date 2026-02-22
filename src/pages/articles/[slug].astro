@@ -4,7 +4,7 @@ import Figure from '../../components/Figure.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
+	const posts = await getCollection('article');
 	return posts.map((post) => ({
 		params: { slug: post.id },
 		props: { post },
@@ -42,10 +42,10 @@ Astro.locals.postId = post.id;
 	</article>
 	<p class="mt-14">
 		<a
-			href="/blogs"
+			href="/articles"
 			class="text-neutral-600 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-500"
 		>
-			← Back to blog
+			← Back to articles
 		</a>
 	</p>
 </BaseLayout>

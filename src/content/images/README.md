@@ -14,4 +14,4 @@ attribution: |
 
 At build time, images are copied to `public/images/<folder-name>.<ext>`. In any post: `<Figure id="folder-name" />`.
 
-**To promote a local (post-colocated) image to global:** move the asset folder from `src/content/blog/<post-slug>/<asset-id>/` to `src/content/images/<asset-id>/`. Update the post to use `<Figure id="asset-id" />` (same id, now resolved globally).
+**To promote a local (post-colocated) image to global:** move the asset folder from `src/content/article/<post-slug>/<asset-id>/` to `src/content/images/<asset-id>/`. Update the post to use `<Figure id="asset-id" />` (same id, now resolved globally).

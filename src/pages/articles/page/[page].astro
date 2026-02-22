@@ -1,12 +1,12 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-import { BLOG_PAGE_SIZE } from '../../../lib/constants';
+import { ARTICLE_PAGE_SIZE } from '../../../lib/constants';
 import { excerptFromBody } from '../../../lib/excerpt';
 
 export async function getStaticPaths() {
-	const pageSize = BLOG_PAGE_SIZE;
-	const allPosts = (await getCollection('blog')).sort(
+	const pageSize = ARTICLE_PAGE_SIZE;
+	const allPosts = (await getCollection('article')).sort(
 		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 	);
 	const total = allPosts.length;
@@ -26,24 +26,24 @@ const { posts, currentPage, lastPage } = Astro.props;
 ---
 
 <BaseLayout
-	title={`Blog — page ${currentPage}`}
-	description={`Blog posts, page ${currentPage} of ${lastPage}.`}
+	title={`Articles — page ${currentPage}`}
+	description={`Articles, page ${currentPage} of ${lastPage}.`}
 >
 	<header class="mb-14">
-		<h1 class="text-3xl font-semibold tracking-tight text-neutral-900">Blog</h1>
+		<h1 class="text-3xl font-semibold tracking-tight text-neutral-900">Articles</h1>
 		<p class="mt-2 text-lg text-neutral-600">
 			Page {currentPage} of {lastPage}.
 		</p>
 	</header>
 
-	<nav aria-label="Blog post list">
+	<nav aria-label="Article list">
 		<ol class="space-y-12 list-none p-0 m-0">
 			{posts.map((post) => (
 				<li>
 					<article class="border-b border-neutral-200 pb-12 last:border-0">
 						<h2 class="text-xl font-semibold tracking-tight">
 							<a
-								href={`/blogs/${post.id}`}
+								href={`/articles/${post.id}`}
 								class="text-neutral-900 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-500 focus:outline focus:decoration-neutral-700"
 							>
 								{post.data.title}
@@ -68,16 +68,16 @@ const { posts, currentPage, lastPage } = Astro.props;
 		</ol>
 	</nav>
 
-	<nav aria-label="Blog pagination" class="mt-14 flex flex-wrap items-center gap-4 text-neutral-600">
+	<nav aria-label="Article pagination" class="mt-14 flex flex-wrap items-center gap-4 text-neutral-600">
 		<a
-			href={currentPage === 2 ? '/blogs' : `/blogs/page/${currentPage - 1}`}
+			href={currentPage === 2 ? '/articles' : `/articles/page/${currentPage - 1}`}
 			class="font-medium underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-500"
 		>
 			← Newer posts
 		</a>
 		{currentPage < lastPage ? (
 			<a
-				href={`/blogs/page/${currentPage + 1}`}
+				href={`/articles/page/${currentPage + 1}`}
 				class="font-medium underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-500"
 			>
 				Older posts →

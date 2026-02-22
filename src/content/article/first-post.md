@@ -4,7 +4,7 @@ pubDate: 2025-02-20
 summary: A short summary for the listing page when you don't want to use the first few sentences.
 ---
 
-This is the first blog post. It has a few sentences so we can test both listing styles: with a frontmatter summary and without.
+This is the first article. It has a few sentences so we can test both listing styles: with a frontmatter summary and without.
 
 The second paragraph is here. On the listing page you should see either the custom summary above or these first few sentences, depending on whether `summary` is set.
 

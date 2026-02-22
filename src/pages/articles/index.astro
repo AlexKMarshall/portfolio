@@ -1,33 +1,33 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-import { BLOG_PAGE_SIZE } from '../../lib/constants';
+import { ARTICLE_PAGE_SIZE } from '../../lib/constants';
 import { excerptFromBody } from '../../lib/excerpt';
 
-const allPosts = (await getCollection('blog')).sort(
+const allPosts = (await getCollection('article')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-const posts = allPosts.slice(0, BLOG_PAGE_SIZE);
-const hasNextPage = allPosts.length > BLOG_PAGE_SIZE;
+const posts = allPosts.slice(0, ARTICLE_PAGE_SIZE);
+const hasNextPage = allPosts.length > ARTICLE_PAGE_SIZE;
 const nextPage = 2;
 ---
 
-<BaseLayout title="Blog" description="Blog posts, most recent first.">
+<BaseLayout title="Articles" description="Articles, most recent first.">
 	<header class="mb-14">
-		<h1 class="text-3xl font-semibold tracking-tight text-neutral-900">Blog</h1>
+		<h1 class="text-3xl font-semibold tracking-tight text-neutral-900">Articles</h1>
 		<p class="mt-2 text-lg text-neutral-600">
 			Posts in reverse chronological order.
 		</p>
 	</header>
 
-	<nav aria-label="Blog post list">
+	<nav aria-label="Article list">
 		<ol class="space-y-12 list-none p-0 m-0">
 			{posts.map((post) => (
 				<li>
 					<article class="border-b border-neutral-200 pb-12 last:border-0">
 						<h2 class="text-xl font-semibold tracking-tight">
 							<a
-								href={`/blogs/${post.id}`}
+								href={`/articles/${post.id}`}
 								class="text-neutral-900 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-500 focus:outline focus:decoration-neutral-700"
 							>
 								{post.data.title}
@@ -55,7 +55,7 @@ const nextPage = 2;
 	{hasNextPage ? (
 		<p class="mt-14 text-neutral-600">
 			<a
-				href="/blogs/page/2"
+				href="/articles/page/2"
 				class="font-medium underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-500"
 			>
 				Older posts →

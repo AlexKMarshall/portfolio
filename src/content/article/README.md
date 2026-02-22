@@ -1,4 +1,4 @@
-# Blog posts
+# Articles
 
 **File post:** `slug.md` or `slug.mdx` — the slug is the filename (without extension).
 
