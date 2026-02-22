@@ -21,6 +21,12 @@ const { title, description = 'A simple articles site.' } = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body class="min-h-screen bg-neutral-50 text-neutral-900 antialiased">
+		<nav aria-label="Site" class="border-b border-neutral-200 bg-white">
+			<ul class="mx-auto flex max-w-2xl flex-wrap gap-x-6 gap-y-2 px-6 py-4 list-none m-0 sm:px-8">
+				<li><a href="/" class="text-neutral-700 underline-offset-4 hover:text-neutral-900 hover:underline">Home</a></li>
+				<li><a href="/articles" class="text-neutral-700 underline-offset-4 hover:text-neutral-900 hover:underline">Articles</a></li>
+			</ul>
+		</nav>
 		<main class="mx-auto max-w-2xl px-6 py-16 sm:px-8">
 			<slot />
 		</main>
