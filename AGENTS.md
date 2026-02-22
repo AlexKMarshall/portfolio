@@ -5,6 +5,7 @@ This repo is a simple Astro articles site (future part of a personal developer p
 ## What’s here
 
 - **Articles:** Listing at `/articles` (paginated), posts at `/articles/:slug`. Content is Markdown/MDX in the repo; no CMS.
+- **Pattern library:** UI pattern docs at `/pattern-library`, one page per pattern; patterns are colocated with components (see **Components** below).
 - **Images:** Global assets in `src/content/images/`; folder posts can have colocated image folders. Same structure everywhere (image file + `meta.yaml`) so local assets can be moved to global later.
 - **Stack:** Astro 5, TypeScript, Tailwind v4 (Vite plugin), MDX, YAML for image metadata. No extra deps except Tailwind and `yaml`.
 
@@ -22,7 +23,9 @@ This repo is a simple Astro articles site (future part of a personal developer p
 | Global image assets (folder per image + `meta.yaml`) | `src/content/images/` |
 | Article collection config (glob, schema) | `src/content.config.ts` |
 | Image copy + virtual module | `vite-plugin-image-assets.mjs` (root) |
+| Reusable components | `src/components/` |
 | Figure (resolve id, optional postId) | `src/components/Figure.astro` |
+| Pattern library (colocated docs) | `src/components/*.pattern.mdx` → `/pattern-library/[slug]` |
 | Post layout, passes `Astro.locals.postId` | `src/pages/articles/[slug].astro` |
 | Listing + pagination | `src/pages/articles/index.astro`, `src/pages/articles/page/[page].astro` |
 | Shared constants (e.g. page size) | `src/lib/constants.ts` |
@@ -51,7 +54,7 @@ There is no `turbo.json` in this repo; use the scripts above. Prefer running the
 - **New folder post:** Add `slug/index.mdx` (and optionally colocated image folders). Same frontmatter; slug = folder name.
 - **New global image:** Add folder under `src/content/images/<id>/` with one image file and `meta.yaml`. See `src/content/images/README.md`.
 - **New local image:** Add folder next to the post’s `index.mdx` with same structure; reference with `<Figure id="folder-name" />` in that post.
-- **New components or markup:** Any new Astro components, layout changes, or page markup that use Tailwind color classes must include corresponding `dark:` variants (see **Dark mode** under Conventions).
+- **New components or markup:** Any new Astro components, layout changes, or page markup that use Tailwind color classes must include corresponding `dark:` variants (see **Dark mode** under Conventions). Where it makes sense, document reusable UI components in the pattern library by adding a colocated `ComponentName.pattern.mdx` in the same folder as the component; it will appear at `/pattern-library/<kebab-name>`. See `src/components/README.md`.
 
 ## Promoting a local image to global
 

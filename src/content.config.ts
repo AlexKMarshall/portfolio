@@ -51,7 +51,27 @@ const site = defineCollection({
 	}),
 });
 
+const pattern = defineCollection({
+	loader: glob({
+		pattern: ['**/*.pattern.mdx'],
+		base: './src/components',
+		generateId({ entry }) {
+			// ArticleTags.pattern.mdx -> article-tags; subdir/Button.pattern.mdx -> button
+			const withoutSuffix = entry.replace(/\.pattern\.mdx$/i, '');
+			const name = withoutSuffix.split('/').pop() ?? withoutSuffix;
+			return name
+				.replace(/([A-Z])/g, (_, c: string) => '-' + c.toLowerCase())
+				.replace(/^-/, '');
+		},
+	}),
+	schema: z.object({
+		title: z.string(),
+		description: z.string(),
+	}),
+});
+
 export const collections = {
 	article,
 	site,
+	pattern,
 };

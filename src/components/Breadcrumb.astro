@@ -1,0 +1,23 @@
+---
+/** @param {{ items: { label: string; href?: string }[] }} */
+const { items = [] } = Astro.props;
+---
+
+{items.length > 0 ? (
+	<nav aria-label="Breadcrumb" class="text-sm text-slate-500 dark:text-slate-400">
+		<ol class="flex flex-wrap items-baseline list-none p-0 m-0 gap-x-0 [&>li]:flex [&>li]:items-baseline [&>li]:gap-x-1.5">
+			{items.map((item: { label: string; href?: string }, i: number) => (
+				<li>
+					{i > 0 ? <span class="mx-1.5 text-slate-400 dark:text-slate-500" aria-hidden="true">/</span> : null}
+					{item.href != null ? (
+						<a href={item.href} class="underline underline-offset-4 hover:text-slate-700 dark:hover:text-slate-300">
+							{item.label}
+						</a>
+					) : (
+						<span>{item.label}</span>
+					)}
+				</li>
+			))}
+		</ol>
+	</nav>
+) : null}

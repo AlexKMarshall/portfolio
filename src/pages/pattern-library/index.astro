@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PatternList from '../../components/PatternList.astro';
+import { getCollection } from 'astro:content';
+
+const patterns = (await getCollection('pattern')).sort((a, b) =>
+	a.data.title.localeCompare(b.data.title),
+);
+---
+
+<BaseLayout
+	title="Pattern library"
+	description="Documentation of UI patterns used on this site — components, layouts, and other reusable pieces."
+>
+	<header class="mb-10">
+		<h1 class="text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+			Pattern library
+		</h1>
+		<p class="mt-5 text-slate-700 leading-relaxed dark:text-slate-300">
+			This section documents all the UI patterns used on the site: components, layouts, and other
+			reusable pieces. Each pattern has its own page under <code class="rounded bg-slate-200 px-1.5 py-0.5 text-sm dark:bg-slate-700">/pattern-library/[name]</code>, where you can see live examples, usage notes, and variants — similar to a Storybook, but built with Astro and served as part of the site.
+		</p>
+	</header>
+
+	<section aria-labelledby="patterns-heading">
+		<h2 id="patterns-heading" class="mb-4 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+			Patterns
+		</h2>
+		<PatternList patterns={patterns} />
+	</section>
+</BaseLayout>
