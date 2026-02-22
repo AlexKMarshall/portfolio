@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+/* Cross-document view transitions (Chrome 126+, Edge 126+). No JS; full page loads get a default transition. Ignored in other browsers. */
+@view-transition {
+  navigation: auto;
+}
+
 /* Code blocks in article and pattern-library content: subtle background, single text color */
 .post-body pre,
 .pattern-body pre {
