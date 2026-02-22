@@ -6,7 +6,7 @@ const { patterns } = Astro.props;
 ---
 
 <ul class="space-y-2 list-none p-0 m-0" aria-label="Pattern library entries">
-	{patterns.map((pattern) => (
+	{patterns.map((pattern: { id: string; data: { title: string; description: string } }) => (
 		<PatternListItem
 			id={pattern.id}
 			title={pattern.data.title}

@@ -45,8 +45,9 @@ This repo is a simple Astro articles site (future part of a personal developer p
 - **Dev:** `pnpm dev`
 - **Build:** `pnpm build`
 - **Preview:** `pnpm preview`
+- **Check:** `pnpm check` (Astro type checking)
 
-There is no `turbo.json` in this repo; use the scripts above. Prefer running these to verify changes.
+There is no `turbo.json` in this repo; use the scripts above. **Run `pnpm check` after any change.** Prefer running these commands to verify changes. A Husky pre-commit hook runs `pnpm check` automatically on commit (after `pnpm install`, the `prepare` script configures Git to use `.husky`).
 
 ## Adding or changing content
 
