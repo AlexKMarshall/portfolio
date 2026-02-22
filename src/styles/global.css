@@ -5,10 +5,39 @@
   navigation: auto;
 }
 
-/* Code blocks in article and pattern-library content: subtle background, single text color */
+/* Code blocks: syntax highlighting via Shiki css-variables. Background/border from Tailwind below. */
+:root {
+  --astro-code-color-text: #334155; /* slate-700 */
+  --astro-code-color-background: transparent;
+  --astro-code-token-comment: #475569; /* slate-600 */
+  --astro-code-token-keyword: #7c3aed; /* violet-600 */
+  --astro-code-token-string: #059669; /* emerald-600 */
+  --astro-code-token-function: #0284c7; /* sky-600 */
+  --astro-code-token-constant: #d97706; /* amber-600 */
+  --astro-code-token-parameter: #c2410c; /* orange-600 */
+  --astro-code-token-string-expression: #b45309; /* amber-700 */
+  --astro-code-token-punctuation: #475569; /* slate-600 */
+  --astro-code-token-link: #0284c7; /* sky-600 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --astro-code-color-text: #e2e8f0; /* slate-200 */
+    --astro-code-token-comment: #94a3b8; /* slate-400 */
+    --astro-code-token-keyword: #a78bfa; /* violet-400 */
+    --astro-code-token-string: #34d399; /* emerald-400 */
+    --astro-code-token-function: #38bdf8; /* sky-400 */
+    --astro-code-token-constant: #fbbf24; /* amber-400 */
+    --astro-code-token-parameter: #fb923c; /* orange-400 */
+    --astro-code-token-string-expression: #fcd34d; /* amber-300 */
+    --astro-code-token-punctuation: #94a3b8; /* slate-400 */
+    --astro-code-token-link: #38bdf8; /* sky-400 */
+  }
+}
+
 .post-body pre,
 .pattern-body pre {
-  @apply rounded-lg border border-slate-200 bg-slate-100 p-4 overflow-x-auto text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200;
+  @apply rounded-lg border border-slate-200 bg-slate-100 p-4 overflow-x-auto text-sm dark:border-slate-700 dark:bg-slate-800;
 }
 
 .post-body pre code,
