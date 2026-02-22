@@ -2,16 +2,20 @@
 import imageAssets from 'virtual:image-assets';
 
 interface Props {
-	/** Image asset id (folder name under src/content/images/). */
+	/** Image asset id (global folder name, or local folder name when postId is set). */
 	id: string;
 	/** Optional caption override for this use. */
 	caption?: string;
+	/** When set (e.g. from a blog post), resolve local asset postId/id. Omit for global only. */
+	postId?: string;
 }
 
-const { id, caption: captionProp } = Astro.props;
-const asset = imageAssets[id];
+const { id, caption: captionProp, postId: postIdProp } = Astro.props;
+const postId = postIdProp ?? (Astro.locals as { postId?: string })?.postId;
+const localKey = postId ? `${postId}/${id}` : null;
+const asset = (localKey && imageAssets[localKey]) ?? imageAssets[id];
 if (!asset) {
-	console.warn(`[Figure] Unknown image id: ${id}`);
+	console.warn(`[Figure] Unknown image id: ${localKey ?? id}`);
 }
 const caption = captionProp ?? asset?.caption;
 const attribution = asset?.attribution;

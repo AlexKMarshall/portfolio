@@ -1,0 +1,49 @@
+---
+title: A post with more elements
+pubDate: 2025-02-21
+summary: This post shows how headings, lists, and images look in the blog.
+---
+
+Here’s a short intro before we get into the structure. This post is here so we can check how different markdown elements render.
+
+## Why structure matters
+
+Using clear headings and lists makes posts easier to scan and read. This section uses an **h2** so it stands out in the outline.
+
+Things that help readability:
+
+- One idea per paragraph
+- Short lists when you have a few related points
+- Headings that describe what the next block is about
+
+## Lists in practice
+
+You’ll often want bullet lists for options or steps. For example, a simple checklist might look like:
+
+- Write the post in markdown (or MDX) under `src/content/blog/`, or use a folder with `index.mdx` for colocated assets
+- Add a `title`, `pubDate`, and optional `summary` in the frontmatter
+- Save the file; the blog listing and post page will pick it up automatically
+
+Numbered lists work too, but this post sticks to bullets to keep the demo focused.
+
+## Global images
+
+Add a folder under `src/content/images/` with your image and `meta.yaml`. Use `<Figure id="folder-name" />` in any post.
+
+<Figure id="placeholder" caption="Placeholder with a caption set in the post." />
+
+## Local images (colocated with this post)
+
+This post is a **folder** (`more-elements-demo/index.mdx`). The folder can contain subfolders that are image assets used only here — same structure: image file + `meta.yaml`. Reference with the same `<Figure id="screenshot" />`; resolution is local first, so this shows the colocated screenshot:
+
+<Figure id="screenshot" caption="A screenshot that lives in this post’s folder. Move the folder to src/content/images/ to make it global." />
+
+## Unsplash images with attribution
+
+Add a folder under `src/content/images/` (e.g. `curved-fabric/`) with the downloaded image and `meta.yaml` (use `attribution: |` and paste the Unsplash “Copy” HTML). Example:
+
+<Figure id="curved-fabric" />
+
+## Wrapping up
+
+With headings, lists, global figures, and colocated local figures, you can keep assets next to the post when they’re only used once — or move the folder to `src/content/images/` and update the id to make an image global.

@@ -1,4 +1,4 @@
-# Image assets (content folder)
+# Image assets (global)
 
 One folder per image. Each folder contains:
 
@@ -12,6 +12,6 @@ attribution: |
   Paste Unsplash HTML here — no escaping. Use the | so you can paste as-is.
 ```
 
-For `attribution`, use the `|` block style and paste the full Unsplash “Copy” text on the next line(s). No quotes or escaping needed.
+At build time, images are copied to `public/images/<folder-name>.<ext>`. In any post: `<Figure id="folder-name" />`.
 
-At build time, images are copied to `public/images/<folder-name>.<ext>`. In posts: `<Figure id="folder-name" />` or `<Figure id="folder-name" caption="Override" />`.
+**To promote a local (post-colocated) image to global:** move the asset folder from `src/content/blog/<post-slug>/<asset-id>/` to `src/content/images/<asset-id>/`. Update the post to use `<Figure id="asset-id" />` (same id, now resolved globally).
