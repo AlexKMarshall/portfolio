@@ -19,17 +19,43 @@ if (!asset) {
 }
 const caption = captionProp ?? (asset && typeof asset === 'object' ? asset.caption : undefined);
 const attribution = asset && typeof asset === 'object' ? asset.attribution : undefined;
+type ResponsiveSource = { type: string; srcSet: Array<{ url: string; w: number }>; sizes: string };
+const hasResponsive = asset && typeof asset === 'object' && 'sources' in asset && (asset as { sources?: ResponsiveSource[] }).sources?.length;
+const responsiveAsset = hasResponsive ? (asset as { sources: ResponsiveSource[]; fallbackUrl: string }) : null;
+const singleUrl = asset && !hasResponsive ? (asset as { url: string }).url : null;
+const defaultSizes = responsiveAsset?.sources?.[0]?.sizes;
+const imgClass = "max-w-full rounded border border-slate-200 dark:border-slate-700";
 ---
 
 {asset ? (
 	<figure class="my-6">
-		<img
-			src={asset.url}
-			alt={asset.alt}
-			class="max-w-full rounded border border-slate-200 dark:border-slate-700"
-			loading="lazy"
-			decoding="async"
-		/>
+		{responsiveAsset ? (
+			<picture>
+				{responsiveAsset.sources.map((source) => (
+					<source
+						type={source.type}
+						srcset={source.srcSet.map((s) => `${s.url} ${s.w}w`).join(', ')}
+						sizes={source.sizes}
+					/>
+				))}
+				<img
+					src={responsiveAsset.fallbackUrl}
+					alt={asset.alt}
+					class={imgClass}
+					loading="lazy"
+					decoding="async"
+					sizes={defaultSizes}
+				/>
+			</picture>
+		) : (
+			<img
+				src={singleUrl}
+				alt={asset.alt}
+				class={imgClass}
+				loading="lazy"
+				decoding="async"
+			/>
+		)}
 		{(caption ?? attribution) ? (
 			<figcaption class="mt-2 text-sm text-slate-500 [&_a]:underline [&_a]:decoration-slate-400 [&_a]:underline-offset-2 hover:[&_a]:decoration-slate-600 dark:text-slate-400 dark:[&_a]:decoration-slate-500 dark:hover:[&_a]:decoration-slate-400">
 				{caption ? <span>{caption}</span> : null}

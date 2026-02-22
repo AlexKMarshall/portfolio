@@ -28,3 +28,4 @@ pnpm-debug.log*
 .idea/
 
 .turbo
+.pnpm-store
