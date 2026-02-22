@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleTags from '../../components/ArticleTags.astro';
+---
+
+<BaseLayout
+	title="ArticleTags — Pattern library"
+	description="ArticleTags component: inline tag pills for article metadata."
+>
+	<header class="mb-10">
+		<p class="text-sm text-slate-500 dark:text-slate-400">
+			<a href="/pattern-library" class="underline underline-offset-4 hover:text-slate-700 dark:hover:text-slate-300">Pattern library</a>
+			<span class="mx-1.5">/</span>
+			ArticleTags
+		</p>
+		<h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+			ArticleTags
+		</h1>
+		<p class="mt-5 text-slate-700 leading-relaxed dark:text-slate-300">
+			Renders a list of tags as small pill-style labels. Used on article pages to show categories or topics. Accepts a <code class="rounded bg-slate-200 px-1.5 py-0.5 text-sm dark:bg-slate-700">tags</code> prop (array of strings). Renders nothing when the array is empty. Includes <code>aria-label="Tags"</code> for accessibility.
+		</p>
+	</header>
+
+	<section aria-labelledby="example-heading">
+		<h2 id="example-heading" class="mb-4 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+			Example
+		</h2>
+		<ArticleTags tags={['astro', 'tailwind', 'pattern-library']} />
+	</section>
+</BaseLayout>

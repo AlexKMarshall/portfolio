@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Figure from '../../components/Figure.astro';
+---
+
+<BaseLayout
+	title="Figure — Pattern library"
+	description="Figure component: responsive images with optional caption and attribution from global or post-local assets."
+>
+	<header class="mb-10">
+		<p class="text-sm text-slate-500 dark:text-slate-400">
+			<a href="/pattern-library" class="underline underline-offset-4 hover:text-slate-700 dark:hover:text-slate-300">Pattern library</a>
+			<span class="mx-1.5">/</span>
+			Figure
+		</p>
+		<h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+			Figure
+		</h1>
+		<p class="mt-5 text-slate-700 leading-relaxed dark:text-slate-300">
+			Renders an image from the global or post-local asset system, with optional caption and attribution. Props: <code class="rounded bg-slate-200 px-1.5 py-0.5 text-sm dark:bg-slate-700">id</code> (required, asset folder name), <code class="rounded bg-slate-200 px-1.5 py-0.5 text-sm dark:bg-slate-700">caption</code> (optional override), <code class="rounded bg-slate-200 px-1.5 py-0.5 text-sm dark:bg-slate-700">postId</code> (optional, for article-local assets). Caption and attribution come from the asset’s <code class="rounded bg-slate-200 px-1.5 py-0.5 text-sm dark:bg-slate-700">meta.yaml</code> unless overridden. Renders nothing when the asset is missing.
+		</p>
+	</header>
+
+	<section aria-labelledby="no-caption-heading" class="mb-12">
+		<h2 id="no-caption-heading" class="mb-4 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+			Without caption or attribution
+		</h2>
+		<p class="mb-4 text-sm text-slate-600 dark:text-slate-400">
+			Asset has only <code>alt</code> in meta; no <code>&lt;figcaption&gt;</code> is rendered.
+		</p>
+		<Figure id="figure-plain" />
+	</section>
+
+	<section aria-labelledby="caption-only-heading" class="mb-12">
+		<h2 id="caption-only-heading" class="mb-4 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+			With caption only
+		</h2>
+		<p class="mb-4 text-sm text-slate-600 dark:text-slate-400">
+			Asset has <code>caption</code> in meta; attribution can be overridden or omitted.
+		</p>
+		<Figure id="placeholder" />
+	</section>
+
+	<section aria-labelledby="caption-attribution-heading">
+		<h2 id="caption-attribution-heading" class="mb-4 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+			With caption and attribution
+		</h2>
+		<p class="mb-4 text-sm text-slate-600 dark:text-slate-400">
+			Asset has both <code>caption</code> and <code>attribution</code> (HTML allowed for credits, e.g. Unsplash).
+		</p>
+		<Figure id="curved-fabric" />
+	</section>
+</BaseLayout>
