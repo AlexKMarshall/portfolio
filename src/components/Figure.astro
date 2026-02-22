@@ -17,8 +17,8 @@ const asset = (localKey && imageAssets[localKey]) ?? imageAssets[id];
 if (!asset) {
 	console.warn(`[Figure] Unknown image id: ${localKey ?? id}`);
 }
-const caption = captionProp ?? asset?.caption;
-const attribution = asset?.attribution;
+const caption = captionProp ?? (asset && typeof asset === 'object' ? asset.caption : undefined);
+const attribution = asset && typeof asset === 'object' ? asset.attribution : undefined;
 ---
 
 {asset ? (

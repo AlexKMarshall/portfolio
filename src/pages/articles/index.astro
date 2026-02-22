@@ -10,7 +10,6 @@ const allPosts = (await getCollection('article')).sort(
 );
 const posts = allPosts.slice(0, ARTICLE_PAGE_SIZE);
 const hasNextPage = allPosts.length > ARTICLE_PAGE_SIZE;
-const nextPage = 2;
 ---
 
 <BaseLayout title="Articles" description="Articles, most recent first.">

@@ -96,12 +96,15 @@ function discoverAndCopy(root) {
 	return map;
 }
 
+/** @returns {import('vite').Plugin} */
 export default function imageAssetsPlugin() {
 	let root = process.cwd();
+	/** @type {Record<string, { url: string; alt: string; caption?: string; attribution?: string }>} */
 	let assetsMap = {};
 
 	return {
 		name: 'vite-plugin-image-assets',
+		/** @type {'pre'} */
 		enforce: 'pre',
 		configResolved(config) {
 			root = config.root;
