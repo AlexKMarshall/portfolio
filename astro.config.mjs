@@ -8,7 +8,9 @@ import imageAssetsPlugin from "./vite-plugin-image-assets.mjs";
 export default defineConfig({
   integrations: [mdx()],
   markdown: {
-    syntaxHighlight: false,
+    shikiConfig: {
+      theme: "css-variables",
+    },
   },
   vite: {
     plugins: [imageAssetsPlugin(), tailwindcss()],
