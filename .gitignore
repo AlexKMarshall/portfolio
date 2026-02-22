@@ -1,5 +1,9 @@
 # build output
 dist/
+
+# generated at build (from src/content/images/)
+/public/images/*
+!/public/images/README.md
 # generated types
 .astro/
 

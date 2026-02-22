@@ -1,8 +1,3 @@
-# Image assets
+# Served images (generated at build)
 
-Organize images used in blog posts here.
-
-- **screenshots/** – Your own images (e.g. UI screenshots). Reference in posts as `/images/screenshots/filename.png`. Add caption and optional attribution in `src/data/image-metadata.ts` if you want a default caption or credit.
-- **unsplash/** – Downloaded Unsplash images. Put the file here, then add an entry in `src/data/image-metadata.ts` with the path (e.g. `/images/unsplash/your-file.jpg`), a caption, and paste the Unsplash attribution HTML from their “Copy” link so the same image can be reused with correct credit across posts.
-
-Use the `<Figure>` component in MDX posts to render a `<figure>` with optional caption and attribution from the metadata.
+Images are **not** authored here. They live in **`src/content/images/`**: one folder per image, each with the image file and a `meta.json` (alt, optional caption, attribution). The build copies them here so they can be served (e.g. on Netlify). See `src/content/images/README.md` for the content structure.

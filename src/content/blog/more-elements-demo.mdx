@@ -28,17 +28,17 @@ Numbered lists work too, but this post sticks to bullets to keep the demo focuse
 
 ## Your own images (screenshots)
 
-Put your own images in `public/images/screenshots/` and use the `<Figure>` component with a caption. Caption can be set here or as a default in `src/data/image-metadata.ts`.
+Add a folder under `src/content/images/` with your image and a `meta.json` (alt, optional caption, optional attribution). Use `<Figure id="folder-name" />` in posts; caption can be overridden with the `caption` prop.
 
-<Figure src="/images/placeholder.svg" alt="A simple placeholder graphic" caption="Placeholder with a caption set in the post." />
+<Figure id="placeholder" caption="Placeholder with a caption set in the post." />
 
 ## Unsplash images with attribution
 
-Download an image from Unsplash into `public/images/unsplash/`, add an entry in `src/data/image-metadata.ts` with the image path and paste the attribution HTML from Unsplash’s “Copy” link. The same image and credit can be reused across posts. Example (add the file as `curved-fabric.jpg` to see it):
+Add a folder under `src/content/images/` (e.g. `curved-fabric/`) with the downloaded image and a `meta.json` that includes `alt`, optional `caption`, and `attribution` (paste the Unsplash “Copy” HTML). Example:
 
-<Figure src="/images/unsplash/curved-fabric.jpg" alt="Curved fabric swatches in neutral and warm tones" />
+<Figure id="curved-fabric" />
 
-Caption and attribution for this image come from `image-metadata.ts`; you can override the caption in the component if you like.
+Caption and attribution come from the asset’s `meta.json`; you can override the caption with the `caption` prop.
 
 ## Wrapping up
 

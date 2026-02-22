@@ -1,32 +1,38 @@
 ---
-import { imageMetadata } from '../data/image-metadata';
+import imageAssets from 'virtual:image-assets';
 
 interface Props {
-	src: string;
-	alt: string;
+	/** Image asset id (folder name under src/content/images/). */
+	id: string;
+	/** Optional caption override for this use. */
 	caption?: string;
 }
 
-const { src, alt, caption: captionProp } = Astro.props;
-const meta = imageMetadata[src];
-const caption = captionProp ?? meta?.caption;
-const attribution = meta?.attribution;
+const { id, caption: captionProp } = Astro.props;
+const asset = imageAssets[id];
+if (!asset) {
+	console.warn(`[Figure] Unknown image id: ${id}`);
+}
+const caption = captionProp ?? asset?.caption;
+const attribution = asset?.attribution;
 ---
 
-<figure class="my-6">
-	<img
-		src={src}
-		alt={alt}
-		class="max-w-full rounded border border-neutral-200"
-		loading="lazy"
-		decoding="async"
-	/>
-	{(caption ?? attribution) ? (
-		<figcaption class="mt-2 text-sm text-neutral-500 [&_a]:underline [&_a]:decoration-neutral-400 [&_a]:underline-offset-2 hover:[&_a]:decoration-neutral-600">
-			{caption ? <span>{caption}</span> : null}
-			{attribution ? (
-				<span class={caption ? ' block mt-1' : ''} set:html={attribution} />
-			) : null}
-		</figcaption>
-	) : null}
-</figure>
+{asset ? (
+	<figure class="my-6">
+		<img
+			src={asset.url}
+			alt={asset.alt}
+			class="max-w-full rounded border border-neutral-200"
+			loading="lazy"
+			decoding="async"
+		/>
+		{(caption ?? attribution) ? (
+			<figcaption class="mt-2 text-sm text-neutral-500 [&_a]:underline [&_a]:decoration-neutral-400 [&_a]:underline-offset-2 hover:[&_a]:decoration-neutral-600">
+				{caption ? <span>{caption}</span> : null}
+				{attribution ? (
+					<span class={caption ? ' block mt-1' : ''} set:html={attribution} />
+				) : null}
+			</figcaption>
+		) : null}
+	</figure>
+) : null}
