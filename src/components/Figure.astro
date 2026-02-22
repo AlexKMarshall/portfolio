@@ -1,0 +1,32 @@
+---
+import { imageMetadata } from '../data/image-metadata';
+
+interface Props {
+	src: string;
+	alt: string;
+	caption?: string;
+}
+
+const { src, alt, caption: captionProp } = Astro.props;
+const meta = imageMetadata[src];
+const caption = captionProp ?? meta?.caption;
+const attribution = meta?.attribution;
+---
+
+<figure class="my-6">
+	<img
+		src={src}
+		alt={alt}
+		class="max-w-full rounded border border-neutral-200"
+		loading="lazy"
+		decoding="async"
+	/>
+	{(caption ?? attribution) ? (
+		<figcaption class="mt-2 text-sm text-neutral-500 [&_a]:underline [&_a]:decoration-neutral-400 [&_a]:underline-offset-2 hover:[&_a]:decoration-neutral-600">
+			{caption ? <span>{caption}</span> : null}
+			{attribution ? (
+				<span class={caption ? ' block mt-1' : ''} set:html={attribution} />
+			) : null}
+		</figcaption>
+	) : null}
+</figure>

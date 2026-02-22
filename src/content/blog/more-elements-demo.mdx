@@ -1,0 +1,45 @@
+---
+title: A post with more elements
+pubDate: 2025-02-21
+summary: This post shows how headings, lists, and images look in the blog.
+---
+
+Here’s a short intro before we get into the structure. This post is here so we can check how different markdown elements render.
+
+## Why structure matters
+
+Using clear headings and lists makes posts easier to scan and read. This section uses an **h2** so it stands out in the outline.
+
+Things that help readability:
+
+- One idea per paragraph
+- Short lists when you have a few related points
+- Headings that describe what the next block is about
+
+## Lists in practice
+
+You’ll often want bullet lists for options or steps. For example, a simple checklist might look like:
+
+- Write the post in markdown (or MDX) under `src/content/blog/`
+- Add a `title`, `pubDate`, and optional `summary` in the frontmatter
+- Save the file; the blog listing and post page will pick it up automatically
+
+Numbered lists work too, but this post sticks to bullets to keep the demo focused.
+
+## Your own images (screenshots)
+
+Put your own images in `public/images/screenshots/` and use the `<Figure>` component with a caption. Caption can be set here or as a default in `src/data/image-metadata.ts`.
+
+<Figure src="/images/placeholder.svg" alt="A simple placeholder graphic" caption="Placeholder with a caption set in the post." />
+
+## Unsplash images with attribution
+
+Download an image from Unsplash into `public/images/unsplash/`, add an entry in `src/data/image-metadata.ts` with the image path and paste the attribution HTML from Unsplash’s “Copy” link. The same image and credit can be reused across posts. Example (add the file as `curved-fabric.jpg` to see it):
+
+<Figure src="/images/unsplash/curved-fabric.jpg" alt="Curved fabric swatches in neutral and warm tones" />
+
+Caption and attribution for this image come from `image-metadata.ts`; you can override the caption in the component if you like.
+
+## Wrapping up
+
+With headings, lists, and figures (caption + optional attribution), you can keep assets organized and credit in one place.
